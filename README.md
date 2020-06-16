@@ -1,3 +1,5 @@
+# NOT WORKING YET
+
 # Mobile Mask R-CNN
 This is a Mask R-CNN implementation with MobileNet V1/V2 as Backbone architecture to be finally able to deploy it on mobile devices such as the Nvidia Jetson TX2.
 The major changes to the original [matterport project](https://github.com/matterport/Mask_RCNN) are: <br />
