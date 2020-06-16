@@ -23,21 +23,24 @@ MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 WEIGHTS_DIR = os.path.join(ROOT_DIR, "weights")
 DEFAULT_WEIGHTS = os.path.join(ROOT_DIR, "mobile_mask_rcnn_coco.h5")
 
-COCO_JSON = os.path.join(ROOT_DIR, 'collection/out_coco/annotations.json')
-COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection/out_coco/JPEGImages')
+COCO_JSON = os.path.join(ROOT_DIR, 'collection\out_coco\\annotations.json')
+COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection\out_coco')
 
 ## Dataset
 class_names = ['kinder','kusan','doublemint'] #['person']  # all classes: None
 dataset_train = coco.CocoDataset()
 dataset_train.load_coco2(COCO_JSON, COCO_IMG_DIR, class_names)
 dataset_train.prepare()
+print (dataset_train.dataset_size)
 dataset_val = coco.CocoDataset()
 dataset_val.load_coco2(COCO_JSON, COCO_IMG_DIR, class_names)
 dataset_val.prepare()
 
+
 ## Model
 config = coco.CocoConfig()
 config.display()
+
 model = modellib.MaskRCNN(mode="training", model_dir = MODEL_DIR, config=config)
 model.keras_model.summary()
 
@@ -51,7 +54,8 @@ model.load_weights(model_path, by_name=True)
 
 ## Training - Config
 starting_epoch = model.epoch
-epoch = dataset_train.dataset_size // (config.STEPS_PER_EPOCH * config.BATCH_SIZE)
+epoch = dataset_train.dataset_size // (config.STEPS_PER_EPOCH * config.BATCH_SIZE)+1
+print("epoch",epoch)
 epochs_warmup = 1* epoch
 epochs_heads = 7 * epoch #+ starting_epoch
 epochs_stage4 = 7 * epoch #+ starting_epoch

@@ -196,6 +196,7 @@ class CocoDataset(utils.Dataset):
         coco = COCO(json_path)
         class_ids = coco.getCatIds(catNms=class_names)
         image_dir = image_path;
+        print(class_ids)
 
         # Load all classes or a subset?
         if not class_ids:

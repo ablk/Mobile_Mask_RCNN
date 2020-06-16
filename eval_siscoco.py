@@ -21,8 +21,8 @@ MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 COCO_DIR = os.path.join(ROOT_DIR, 'data/coco')
 DEFAULT_WEIGHTS = os.path.join(ROOT_DIR, "mobile_mask_rcnn_coco.h5")
 NUM_EVALS = 10
-COCO_JSON = os.path.join(ROOT_DIR, 'collection/out_coco/annotations.json')
-COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection/out_coco/JPEGImages')
+COCO_JSON = os.path.join(ROOT_DIR, 'collection\out_coco\\annotations.json')
+COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection\out_coco')
 
 # Load Model
 config = coco.CocoConfig()
