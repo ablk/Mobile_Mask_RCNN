@@ -89,7 +89,7 @@ class CocoConfig(Config):
     GPU_COUNT = 2
 
     ## Number of classes (including background)
-    NUM_CLASSES = 1 + 80
+    ##NUM_CLASSES = 1 + 80
 
     ## Backbone Architecture
     BACKBONE = "mobilenetv1"
@@ -116,6 +116,10 @@ class CocoConfig(Config):
     ## Additions
     TRAIN_BN = True
     POST_NMS_ROIS_INFERENCE = 100
+    
+    def __init__(self, num_classes):
+        self.NUM_CLASSES = num_classes
+        super().__init__()
 
 
 ############################################################

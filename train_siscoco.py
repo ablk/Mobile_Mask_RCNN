@@ -38,7 +38,9 @@ dataset_val.prepare()
 
 
 ## Model
-config = coco.CocoConfig()
+num_class=4
+config = coco.CocoConfig(num_class)
+#config.IMAGE_SHAPE=[640,480,3]
 config.display()
 
 model = modellib.MaskRCNN(mode="training", model_dir = MODEL_DIR, config=config)
