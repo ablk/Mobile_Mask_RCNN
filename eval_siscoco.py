@@ -21,11 +21,15 @@ MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 COCO_DIR = os.path.join(ROOT_DIR, 'data/coco')
 DEFAULT_WEIGHTS = os.path.join(ROOT_DIR, "mobile_mask_rcnn_coco.h5")
 NUM_EVALS = 10
-COCO_JSON = os.path.join(ROOT_DIR, 'collection\out_coco\\annotations.json')
-COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection\out_coco')
+COCO_JSON = os.path.join(ROOT_DIR, 'collection/out_coco_val/annotations.json')
+COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection/out_coco_val')
 
 # Load Model
 config = coco.CocoConfig()
+config.GPU_COUNT=1
+config.BATCH_SIZE=1
+config.display()
+
 model = modellib.MaskRCNN(mode="inference", config=config, model_dir=MODEL_DIR)
 
 # Get path to saved weights
