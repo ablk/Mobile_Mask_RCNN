@@ -32,7 +32,7 @@ class Config(object):
     GPU_COUNT = 1
 
     # Use Multiprocessing in MaskRCNN.train()
-    USE_MULTIPROCESSING = True
+    USE_MULTIPROCESSING = False
 
     # Number of images to train with on each GPU. A 12GB GPU can typically
     # handle 2 images of 1024x1024px.

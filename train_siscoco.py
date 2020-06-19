@@ -16,6 +16,12 @@ import imgaug
 ## Import Mobile Mask R-CNN
 from mmrcnn import model as modellib, utils
 import coco
+'''
+import tensorflow as tf
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+tf.keras.backend.set_session(tf.Session(config=config));
+'''
 
 ## Paths
 ROOT_DIR = os.getcwd()
@@ -23,8 +29,8 @@ MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 WEIGHTS_DIR = os.path.join(ROOT_DIR, "weights")
 DEFAULT_WEIGHTS = os.path.join(ROOT_DIR, "mobile_mask_rcnn_coco.h5")
 
-COCO_JSON = os.path.join(ROOT_DIR, 'collection\out_coco\\annotations.json')
-COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection\out_coco')
+COCO_JSON = os.path.join(ROOT_DIR, 'collection/out_coco/annotations.json')
+COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection/out_coco')
 
 ## Dataset
 class_names = ['kinder','kusan','doublemint'] #['person']  # all classes: None
@@ -41,6 +47,8 @@ dataset_val.prepare()
 num_class=4
 config = coco.CocoConfig(num_class)
 #config.IMAGE_SHAPE=[640,480,3]
+config.GPU_COUNT=1
+config.BATCH_SIZE=1
 config.display()
 
 model = modellib.MaskRCNN(mode="training", model_dir = MODEL_DIR, config=config)

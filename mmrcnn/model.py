@@ -29,6 +29,16 @@ import keras.layers as KL
 import keras.engine as KE
 import keras.models as KM
 
+
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+tf.keras.backend.set_session(tf.Session(config=config));
+'''
+physical_devices = tf.config.experimental.list_physical_devices('GPU') 
+for physical_device in physical_devices: 
+    tf.config.experimental.set_memory_growth(physical_device, True)
+'''
+
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../")
 
