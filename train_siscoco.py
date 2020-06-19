@@ -29,17 +29,19 @@ MODEL_DIR = os.path.join(ROOT_DIR, "logs")
 WEIGHTS_DIR = os.path.join(ROOT_DIR, "weights")
 DEFAULT_WEIGHTS = os.path.join(ROOT_DIR, "mobile_mask_rcnn_coco.h5")
 
-COCO_JSON = os.path.join(ROOT_DIR, 'collection/out_coco/annotations.json')
-COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection/out_coco')
+COCO_JSON_TRAIN = os.path.join(ROOT_DIR, 'collection/out_coco_train/annotations.json')
+COCO_IMG_DIR_TRAIN = os.path.join(ROOT_DIR, 'collection/out_coco_train')
+COCO_JSON_VAL = os.path.join(ROOT_DIR, 'collection/out_coco_val/annotations.json')
+COCO_IMG_DIR_VAL = os.path.join(ROOT_DIR, 'collection/out_coco_val')
 
 ## Dataset
 class_names = ['kinder','kusan','doublemint'] #['person']  # all classes: None
 dataset_train = coco.CocoDataset()
-dataset_train.load_coco2(COCO_JSON, COCO_IMG_DIR, class_names)
+dataset_train.load_coco2(COCO_JSON_TRAIN, COCO_IMG_DIR_TRAIN, class_names)
 dataset_train.prepare()
 print (dataset_train.dataset_size)
 dataset_val = coco.CocoDataset()
-dataset_val.load_coco2(COCO_JSON, COCO_IMG_DIR, class_names)
+dataset_val.load_coco2(COCO_JSON_VAL, COCO_IMG_DIR_VAL, class_names)
 dataset_val.prepare()
 
 
