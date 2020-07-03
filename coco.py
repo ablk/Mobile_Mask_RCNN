@@ -119,7 +119,7 @@ class CocoConfig(Config):
     
     def __init__(self, num_classes):
         self.NUM_CLASSES = num_classes
-        super().__init__()
+        super(CocoConfig,self).__init__()
 
 
 ############################################################

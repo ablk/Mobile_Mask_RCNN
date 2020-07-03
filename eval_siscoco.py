@@ -1,11 +1,9 @@
-"""
-Mobile Mask R-CNN Train & Eval Script
-for Training on the COCO Dataset
+#!/usr/bin/env python
+import rospy
 
-written by github.com/GustavZ
-"""
 # Import Packages
 import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 import sys
 import random
 import numpy as np
@@ -14,6 +12,8 @@ import numpy as np
 from mmrcnn import model as modellib, utils, visualize
 from mmrcnn.model import log
 import coco
+import cv2
+
 
 # Paths
 ROOT_DIR = os.getcwd()
@@ -25,7 +25,8 @@ COCO_JSON = os.path.join(ROOT_DIR, 'collection/out_coco_val/annotations.json')
 COCO_IMG_DIR = os.path.join(ROOT_DIR, 'collection/out_coco_val')
 
 # Load Model
-config = coco.CocoConfig()
+num_class=4
+config = coco.CocoConfig(num_class)
 config.GPU_COUNT=1
 config.BATCH_SIZE=1
 config.display()
@@ -35,71 +36,24 @@ model = modellib.MaskRCNN(mode="inference", config=config, model_dir=MODEL_DIR)
 # Get path to saved weights
 # Either set a specific path or find last trained weights
 #model_path = DEFAULT_WEIGHTS
-model_path = model.find_last()[1]
+#model_path = model.find_last()[1]
+model_path=os.path.join(MODEL_DIR, "512_coco20200619T1629/mask_rcnn_512_coco_0027.h5")
 
 # Load trained weights (fill in path to trained weights here)
 assert model_path != "", "Provide path to trained weights"
 print("> Loading weights from {}".format(model_path))
 model.load_weights(model_path, by_name=True)
 
-# Dataset
-class_names = ['kinder','kusan','doublemint']  # all classes: None
-dataset_val = coco.CocoDataset()
-COCO = dataset_val.load_coco2(COCO_JSON, COCO_IMG_DIR, class_names,True)
-dataset_val.prepare()
-print("> Running COCO evaluation on {} images.".format(NUM_EVALS))
-coco.evaluate_coco(model, dataset_val, COCO, "bbox", limit=NUM_EVALS)
-model.keras_model.save(MODEL_DIR+"/mobile_mask_rcnn_{}.h5".format(config.NAME))
+class_names=['0','kinder','kusan','doublemint']
 
+#original_image=cv2.imread("collection/test/frame0078.jpg")
+#original_image=cv2.imread("collection/out_coco_val/JPEGImages/scene_000000000020.jpg")
 
-# Test on a random image
-image_id = random.choice(dataset_val.image_ids)
-original_image, image_meta, gt_class_id, gt_bbox, gt_mask =\
-    modellib.load_image_gt(dataset_val, config,
-                           image_id, use_mini_mask=False)
-
-log("original_image", original_image)
-log("image_meta", image_meta)
-log("gt_class_id", gt_class_id)
-log("gt_bbox", gt_bbox)
-log("gt_mask", gt_mask)
-
-visualize.display_instances(original_image, gt_bbox, gt_mask, gt_class_id,
-                            dataset_train.class_names, figsize=(8, 8))
-
+original_image=cv2.imread("collection/test/testa2.jpg")
+original_image = cv2.cvtColor(original_image, cv2.COLOR_RGB2BGR)
 results = model.detect([original_image], verbose=1)
-
 r = results[0]
 visualize.display_instances(original_image, r['rois'], r['masks'], r['class_ids'],
-                            dataset_val.class_names, r['scores'], ax=get_ax())
+                            class_names, r['scores'])
 
-# Compute VOC-Style mAP @ IoU=0.5
-# Running on 10 images. Increase for better accuracy.
-image_ids = np.random.choice(dataset_val.image_ids, 10)
-APs = []
 
-for image_id in image_ids:
-    # Load image and ground truth data
-    image, image_meta, gt_class_id, gt_bbox, gt_mask =\
-        modellib.load_image_gt(dataset_val, config,
-                               image_id, use_mini_mask=False)
-    molded_images = np.expand_dims(modellib.mold_image(image, config), 0)
-    # Run object detection
-    results = model.detect([image], verbose=0)
-    r = results[0]
-
-    # Compute AP
-    AP, precisions, recalls, overlaps =\
-        utils.compute_ap(gt_bbox, gt_class_id, gt_mask,
-                         r["rois"], r["class_ids"], r["scores"], r['masks'])
-    APs.append(AP)
-
-print("mAP: ", np.mean(APs))
-
-image_ids = np.random.choice(dataset_val.image_ids, 10)
-
-image, image_meta, gt_class_id, gt_bbox, gt_mask =\
-        modellib.load_image_gt(dataset_val, config,
-                               image_ids[0], use_mini_mask=False)
-
-print (r['masks'])

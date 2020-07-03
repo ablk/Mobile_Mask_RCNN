@@ -16,7 +16,8 @@ import imgaug
 ## Import Mobile Mask R-CNN
 from mmrcnn import model as modellib, utils
 import coco
-
+config = coco.CocoConfig()
+config.display()
 ## Paths
 ROOT_DIR = os.getcwd()
 MODEL_DIR = os.path.join(ROOT_DIR, "logs")
